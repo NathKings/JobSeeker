@@ -14,9 +14,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('app');
 });
 Route::get('/jobs', 'JobController@all')->name('jobs.all');
 Route::post('/jobs', 'JobController@store')->name('jobs.store');
 Route::get('/jobs/{job}', 'JobController@show')->name('jobs.show');
-Route::put('/jobs/{job}', 'JobController@update')->name('jobs.update');
+Route::get('/jobs/{job}', 'JobController@update')->name('jobs.update');
+Route::put('/jobs/{job}', 'JobController@updateJob')->name('jobs.updateJob');
+
+// Processors
+Route::get('/processors', 'JobController@allProcessors');

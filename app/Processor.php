@@ -7,4 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Processor extends Model
 {
     protected $table = 'processors';
+    protected $fillable = ['id', 'name'];
+
+    public function jobs()
+    {
+        return $this->hasOne('App\Job');
+    }
 }

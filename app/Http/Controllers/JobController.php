@@ -3,31 +3,32 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\JobsRepository;
 use App\Job;
+use App\Processor;
 
 class JobController extends Controller
 {
- 	public function all()
+    // This function return only the jobs with state pending, and
+    // 'high' priority.
+ 	  public function all()
     {
-        $jobs = Job::all();
+        $jobs = Job::where('state' , '0')->where('priority', 'high')->get();
         return response()->json($jobs);
     }
 
     public function store(Request $request)
     {
-    	dd($request->all());
          $request->validate([
             'priority' 		=> 'required',
             'description' 	=> 'required',
-            'name' 			=> 'required'
+            'name' 			=> 'required',
+            'state' => 'required',
+            'processor_id' => 'required'
         ]);
 
         $job = Job::create($request->all());
-
         return response()->json([
-            'message' => 'El trabajo ha sido creado exitosamente!',
-            'job_id' => $job->id
+            'message' => 'Job has been created successfully! Job ID: '.$job->id
         ]);
     }
 
@@ -39,16 +40,30 @@ class JobController extends Controller
     public function update(Request $request, Job $job)
     {
         $request->validate([
-            'priority' 		=> 'nullable',
+            'priority' 		  => 'nullable',
             'description' 	=> 'nullable',
-            'name' 			=> 'nullable'
+            'name' 			    => 'nullable',
+            'status'       => 'nullable'
         ]);
 
         $job->update($request->all());
 
         return response()->json([
-            'message' => 'El trabajo ha sido actualizado con éxito!',
+            'message' => 'Job has been updated successfully!',
             'job' => $job
         ]);
+    }
+
+    public function allProcessors()
+    {
+        $processors = Processor::all();
+        return response()->json($processors);
+    }
+
+    // this function find a job by id
+    // submitter can search a job by and id.
+    public function findJobById($id)
+    {
+        return  Job::find($id);
     }
 }
