@@ -17,10 +17,10 @@ class CreateJobsTableTable extends Migration
             $table->increments('id');
             $table->unsignedBigInteger('processor_id');
             $table->foreign('processor_id')->references('id')->on('processors')->onDelete('cascade');
-            $table->unsignedBigInteger('submitter_id');
+            $table->unsignedBigInteger('submitter_id')->default(NULL);
             $table->foreign('submitter_id')->references('id')->on('submitters')->onDelete('cascade');
             $table->integer('state');
-            $table->string('priority');
+            $table->string('priority',50);
             $table->string('name', 50);
             $table->string('description');
             $table->timestamps();

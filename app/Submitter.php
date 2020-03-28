@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Submitter extends Model
 {
     protected $table = 'submitters';
-    protected $fillable = ['id', 'name'];
+    protected $fillable = ['id', 'submitter_name'];
 
     public function jobs()
     {

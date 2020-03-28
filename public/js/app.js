@@ -1966,12 +1966,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       create: false,
       edit: false,
-      editType: 0,
       submitters: [],
       processors: [],
       job: {
@@ -1987,6 +1990,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getProcessors();
+    this.getSubmitters();
     this.reloadModel();
   },
   methods: {
@@ -2004,7 +2008,6 @@ __webpack_require__.r(__webpack_exports__);
           submitter_id: vueInstance.job.submitter_id
         }).then(function (response) {
           alert(response.data.message);
-          console.log(response.data.message);
           vueInstance.create = false;
         })["catch"](function (error) {
           console.log(error);
@@ -2024,9 +2027,7 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     },
-    updateJob: function updateJob(id, type) {
-      this.editType = type;
-      this.edit = !this.edit;
+    updateJob: function updateJob(id) {
       var vue = this;
       axios.post('/findJobById', {
         id: id
@@ -37417,30 +37418,6 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/HomeComponent.vue?vue&type=template&id=41daeb37&":
-/*!***********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/HomeComponent.vue?vue&type=template&id=41daeb37& ***!
-  \***********************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("Home component")])
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/JobsComponent.vue?vue&type=template&id=60e21d20&":
 /*!***********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/JobsComponent.vue?vue&type=template&id=60e21d20& ***!
@@ -37464,26 +37441,11 @@ var render = function() {
         [
           _vm._m(0),
           _vm._v(" "),
-          _vm._m(1),
-          _vm._v(" "),
           _vm._l(_vm.jobs, function(job) {
             return _c("ul", { staticClass: "list-group" }, [
               _c("li", { staticClass: "list-group-item" }, [
                 _c("h5", [_vm._v(_vm._s(job.name))]),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    on: {
-                      click: function($event) {
-                        return _vm.updateJob(job.id, 1)
-                      }
-                    }
-                  },
-                  [_vm._v("Take the Job!")]
-                ),
-                _vm._v("\n                    or "),
                 _c(
                   "button",
                   {
@@ -37603,7 +37565,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(2),
+                  _vm._m(1),
                   _vm._v(" "),
                   _vm.edit
                     ? _c("label", { attrs: { for: "" } }, [
@@ -37631,68 +37593,119 @@ var render = function() {
                       })
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "" } }, [
-                    _vm._v(
-                      _vm._s(_vm.editType == 1 ? "Processor:" : "Submitter:") +
-                        " "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("span"),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value:
-                            _vm.editType == 1
-                              ? _vm.job.processor_id
-                              : _vm.job.submitter_id,
-                          expression:
-                            "editType == 1 ? job.processor_id : job.submitter_id"
-                        }
-                      ],
-                      attrs: { name: "", id: "dropdown" },
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.$set(
-                            _vm.editType == 1 ? _vm.job.processor_id : _vm.job,
-                            "submitter_id",
-                            $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          )
-                        }
-                      }
-                    },
-                    [
-                      _c("option", { attrs: { value: "0" } }, [
-                        _vm._v("Select here")
+                _vm.create
+                  ? _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "" } }, [
+                        _vm._v("Processor")
                       ]),
                       _vm._v(" "),
-                      _vm._l(_vm.processors, function(processor) {
-                        return _c(
-                          "option",
-                          { domProps: { value: processor.id } },
-                          [_vm._v(_vm._s(processor.processor_name))]
-                        )
-                      })
-                    ],
-                    2
-                  )
-                ]),
+                      _c("span"),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.job.processor_id,
+                              expression: "job.processor_id"
+                            }
+                          ],
+                          attrs: { name: "", id: "dropdown" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.job,
+                                "processor_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _c(
+                            "option",
+                            { attrs: { value: "0", selected: "" } },
+                            [_vm._v("Select here")]
+                          ),
+                          _vm._v(" "),
+                          _vm._l(_vm.processors, function(processor) {
+                            return _c(
+                              "option",
+                              { domProps: { value: processor.id } },
+                              [_vm._v(_vm._s(processor.processor_name))]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ])
+                  : _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "" } }, [
+                        _vm._v("Submitter")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.job.submitter_id,
+                              expression: "job.submitter_id"
+                            }
+                          ],
+                          attrs: { name: "", id: "dropdown4" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.job,
+                                "submitter_id",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _c(
+                            "option",
+                            { attrs: { value: "0", selected: "" } },
+                            [_vm._v("Select here")]
+                          ),
+                          _vm._v(" "),
+                          _vm._l(_vm.submitters, function(submitter) {
+                            return _c(
+                              "option",
+                              { domProps: { value: submitter.id } },
+                              [_vm._v(_vm._s(submitter.submitter_name))]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group" }, [
                   _c("label", { attrs: { for: "" } }, [_vm._v("State:")]),
@@ -37733,9 +37746,11 @@ var render = function() {
                           }
                         },
                         [
-                          _c("option", { attrs: { value: "-1" } }, [
-                            _vm._v("Select here")
-                          ]),
+                          _c(
+                            "option",
+                            { attrs: { value: "-1", selected: "" } },
+                            [_vm._v("Select here")]
+                          ),
                           _vm._v(" "),
                           _c("option", { attrs: { value: "1" } }, [
                             _vm._v("Completed")
@@ -37768,14 +37783,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "header" }, [
       _c("h2", [_vm._v("Available Job list")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-6" }, [
-      _c("input", { attrs: { type: "text" } })
     ])
   },
   function() {
@@ -49964,7 +49971,6 @@ __webpack_require__(/*! ./bootstrap */ "./resources/assets/js/bootstrap.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('jobs-component', __webpack_require__(/*! ./components/JobsComponent.vue */ "./resources/assets/js/components/JobsComponent.vue")["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('home-component', __webpack_require__(/*! ./components/HomeComponent.vue */ "./resources/assets/js/components/HomeComponent.vue")["default"]);
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app'
 });
@@ -50014,59 +50020,6 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
-
-/***/ }),
-
-/***/ "./resources/assets/js/components/HomeComponent.vue":
-/*!**********************************************************!*\
-  !*** ./resources/assets/js/components/HomeComponent.vue ***!
-  \**********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _HomeComponent_vue_vue_type_template_id_41daeb37___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./HomeComponent.vue?vue&type=template&id=41daeb37& */ "./resources/assets/js/components/HomeComponent.vue?vue&type=template&id=41daeb37&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-var script = {}
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
-  script,
-  _HomeComponent_vue_vue_type_template_id_41daeb37___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _HomeComponent_vue_vue_type_template_id_41daeb37___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/assets/js/components/HomeComponent.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/assets/js/components/HomeComponent.vue?vue&type=template&id=41daeb37&":
-/*!*****************************************************************************************!*\
-  !*** ./resources/assets/js/components/HomeComponent.vue?vue&type=template&id=41daeb37& ***!
-  \*****************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_HomeComponent_vue_vue_type_template_id_41daeb37___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./HomeComponent.vue?vue&type=template&id=41daeb37& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/HomeComponent.vue?vue&type=template&id=41daeb37&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_HomeComponent_vue_vue_type_template_id_41daeb37___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_HomeComponent_vue_vue_type_template_id_41daeb37___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
 
 /***/ }),
 

@@ -23,7 +23,6 @@ Route::get('/jobs/{job}', 'JobController@show')->name('jobs.show');
 Route::get('/jobs/{job}', 'JobController@update')->name('jobs.update');
 Route::put('/jobs/update', 'JobController@updateJob')->name('jobs.updateJob');
 
-
-
 // Processors
 Route::get('/processors', 'JobController@allProcessors');
+Route::get('/submitters', 'JobController@allSubmitters');

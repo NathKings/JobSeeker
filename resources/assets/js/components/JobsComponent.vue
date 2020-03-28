@@ -3,13 +3,9 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="header"><h2>Available Job list</h2></div>
-                <div class="col-md-6">
-                    <input type="text">
-                </div>
                 <ul class="list-group" v-for="job in jobs">
                     <li class="list-group-item"><h5>{{ job.name }}</h5>
-                        <button v-on:click="updateJob(job.id, 1)"  class="btn btn-primary">Take the Job!</button>
-                        or <button v-on:click="updateJob(job.id, 0)"  class="btn btn-primary">Submit this Job!</button> </li>
+                        <button v-on:click="updateJob(job.id, 0)"  class="btn btn-primary">Submit this Job!</button> </li>
                 </ul>
             </div>
             <div>
@@ -34,17 +30,25 @@
                         <label v-if="edit" for="">{{job.priority}}</label>
                         <input v-else type="text" v-model="job.priority">
                     </div>
-                    <div class="form-group">
-                        <label for="">{{editType == 1 ? 'Processor:' : 'Submitter:'}} </label> <span></span>
-                        <select v-model="editType == 1 ? job.processor_id : job.submitter_id" name="" id="dropdown">
-                            <option value="0">Select here</option>
+                    <div v-if="create" class="form-group">
+                        <label for="">Processor</label> <span></span>
+                        <select v-model="job.processor_id" name="" id="dropdown">
+                            <option value="0" selected>Select here</option>
                             <option  v-for="processor in processors" :value="processor.id">{{ processor.processor_name }}</option>
                         </select>
                     </div>
-                    <div class="form-group">
+
+                    <div v-else class="form-group">
+                        <label for="">Submitter</label>
+                        <select v-model="job.submitter_id" name="" id="dropdown4">
+                            <option value="0" selected>Select here</option>
+                            <option  v-for="submitter in submitters" :value="submitter.id">{{ submitter.submitter_name }}</option>
+                        </select>
+                    </div>
+                    <div  v-if="edit" class="form-group">
                         <label for="">State:</label> <span></span>
-                        <select v-if="edit" v-model="job.state" name="" id="dropdown3">
-                            <option value="-1">Select here</option>
+                        <select v-model="job.state" name="" id="dropdown3">
+                            <option value="-1" selected>Select here</option>
                             <option value=1>Completed</option>
                             <option value=0>Pending</option>
                         </select>
@@ -62,7 +66,6 @@
             return {
                 create:false,
                 edit: false,
-                editType: 0,
                 submitters:[],
                 processors:[],
                 job: { name:'', priority:'', state:'0', description:'', processor_id:'', submitter_id:''},
@@ -71,6 +74,7 @@
         },
         mounted() {
             this.getProcessors();
+            this.getSubmitters();
             this.reloadModel();
         },
         methods: {
@@ -89,7 +93,6 @@
                     })
                     .then(function (response) {
                         alert(response.data.message);
-                        console.log(response.data.message);
                         vueInstance.create = false;
                     })
                     .catch(function (error) {
@@ -105,18 +108,16 @@
                         state: 0,
                         processor_id: vueInstance.job.processor_id,
                     })
-                        .then(function (response) {
-                            alert(response.data.message);
-                            vueInstance.create = false;
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
+                    .then(function (response) {
+                        alert(response.data.message);
+                        vueInstance.create = false;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
                 }
             },
-            updateJob: function (id, type){
-                this.editType = type;
-                this.edit = !this.edit;
+            updateJob: function (id){
                 let vue = this;
                 axios.post('/findJobById', {
                     id: id

@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\StoreProcessJob;
+use App\Submitter;
 use Illuminate\Http\Request;
 use App\Job;
 use App\Processor;
 
 class JobController extends Controller
 {
-    // This function return only the jobs with state pending, and
+    // This function return only the pending jobs and
     // 'high' priority.
  	  public function all()
     {
@@ -18,17 +20,23 @@ class JobController extends Controller
 
     public function store(Request $request)
     {
-         $request->validate([
-            'priority' 		=> 'required',
-            'description' 	=> 'required',
-            'name' 			=> 'required',
-            'state' => 'required',
-            'processor_id' => 'required'
-        ]);
+        $message = 'Job has been created successfully!';
+        try{
+            $request->validate([
+                'priority' 		=> 'required',
+                'description' 	=> 'required',
+                'name' 			=> 'required',
+                'state' => 'required',
+                'processor_id' => 'required'
+            ]);
 
-        $job = Job::create($request->all());
+            $job = Job::create($request->all());
+
+        }catch(Exception $ex){
+            $message = 'An error ocurred, please try again later.';
+        }
         return response()->json([
-            'message' => 'Job has been created successfully! Job ID: '.$job->id
+            'message' => $message
         ]);
     }
 
@@ -55,6 +63,12 @@ class JobController extends Controller
     {
         $processors = Processor::all();
         return response()->json($processors);
+    }
+
+    public function allSubmitters()
+    {
+        $subm = Submitter::all();
+        return response()->json($subm);
     }
 
     // this function find a job by id

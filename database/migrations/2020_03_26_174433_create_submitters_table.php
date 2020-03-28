@@ -16,7 +16,17 @@ class CreateSubmittersTable extends Migration
         Schema::create('submitters', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('submitter_name');
+            $table->timestamps();
         });
+
+        $json = File::get("database/data/2020_03_26_174433_create_submitters_table.json");
+        $data = json_decode($json);
+        foreach ($data as $obj) {
+            \App\Submitter::create(array(
+                'id' => $obj->id,
+                'submitter_name' => $obj->submitter_name,
+            ));
+        }
     }
 
     /**
