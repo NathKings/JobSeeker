@@ -68,7 +68,6 @@
     </head>
     <body>
        <div id="app">
-           
            <jobs-component></jobs-component>
        </div>
        <script src="{{ asset('js/app.js')}}" type="text/javascript"></script>

@@ -17,10 +17,13 @@ Route::get('/', function () {
     return view('app');
 });
 Route::get('/jobs', 'JobController@all')->name('jobs.all');
+Route::post('/findJobById', 'JobController@findJobById');
 Route::post('/jobs', 'JobController@store')->name('jobs.store');
 Route::get('/jobs/{job}', 'JobController@show')->name('jobs.show');
 Route::get('/jobs/{job}', 'JobController@update')->name('jobs.update');
-Route::put('/jobs/{job}', 'JobController@updateJob')->name('jobs.updateJob');
+Route::put('/jobs/update', 'JobController@updateJob')->name('jobs.updateJob');
+
+
 
 // Processors
 Route::get('/processors', 'JobController@allProcessors');

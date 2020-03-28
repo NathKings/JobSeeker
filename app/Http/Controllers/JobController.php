@@ -32,26 +32,23 @@ class JobController extends Controller
         ]);
     }
 
-    public function show(Job $job)
+    public function updateJob(Request $request)
     {
-        return $job;
-    }
+       $job = Job::find($request->id);
 
-    public function update(Request $request, Job $job)
-    {
-        $request->validate([
-            'priority' 		  => 'nullable',
-            'description' 	=> 'nullable',
-            'name' 			    => 'nullable',
-            'status'       => 'nullable'
-        ]);
-
-        $job->update($request->all());
-
-        return response()->json([
-            'message' => 'Job has been updated successfully!',
-            'job' => $job
-        ]);
+        if ($job){
+            $job->state = $request->state;
+            $job->submitter_id = $request->submitter_id;
+            $job->processor_id = $request->processor_id;
+            $job->save();
+            return response()->json([
+                'message' => 'Job has been updated successfully!',
+            ]);
+        }else{
+            return response()->json([
+                'message' => 'An error ocurred. Please try again',
+            ]);
+        }
     }
 
     public function allProcessors()
@@ -62,8 +59,9 @@ class JobController extends Controller
 
     // this function find a job by id
     // submitter can search a job by and id.
-    public function findJobById($id)
+    public function findJobById(Request $request)
     {
-        return  Job::find($id);
+        $job = Job::find($request->all());
+        return response()->json($job);
     }
 }
