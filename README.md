@@ -2,11 +2,11 @@
 Example project for Giant Monkey Robot test
 
 # Versions
-PHP 7.2
-Laravel 7.0
-Npm 6.10.3
-Composer 1.10.1
-Vue 2.6.11
+- PHP 7.2
+- Laravel 7.0
+- Npm 6.10.3
+- Composer 1.10.1
+- Vue 2.6.11
 
 # Install 
 
@@ -99,5 +99,5 @@ Vue 2.6.11
         
  # Util information For "Job" class
  
- state: 0 is for pending, 1 is for completed.
- priority: it could be "high", "medium" or "low"
+ - state: 0 is for pending, 1 is for completed.
+ - priority: it could be "high", "medium" or "low"
